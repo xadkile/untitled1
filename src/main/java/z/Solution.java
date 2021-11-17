@@ -12,15 +12,16 @@ public class Solution {
         FracMatrix matrix = handler.readyForUse();
         ReArrangeResult reArrange = matrix.reArrange();
         FracMatrix Q = reArrange.Q;
-//        FracMatrix R = reArrange.Q;
         FracMatrix F = FracMatrix.I(Q.rowCount()).subtract(Q).inverse();
         FracMatrix FR = F.mul(reArrange.R);
-        // make Limit
+
+        // make Limit matrix
         int terminalCount = reArrange.I.rowCount();
         int nonTerminalCount = reArrange.Q.rowCount();
         FracMatrix IO = FracMatrix.O(terminalCount, nonTerminalCount).concat(reArrange.I);
         FracMatrix FRO = FracMatrix.O(nonTerminalCount, nonTerminalCount).concat(FR);
         FracMatrix limitMatrix = FRO.stack(IO);
+
         List<Integer> terminalStates = FracMatrix.getTerminalState(handler.makeOriginalFracMatrix());
         if(limitMatrix.isEmpty()){
             return new int[0];
@@ -34,7 +35,7 @@ public class Solution {
             }
 
             List<Integer> denominators = s0Row.stream().map(e -> e.denominator).collect(Collectors.toList());
-            int maxDenominator = denominators.stream().mapToInt(e -> e).max().getAsInt();
+            int maxDenominator = lcdF(denominators.stream().mapToInt(e->e).toArray());
 
             List<Integer> numerators = s0Row.stream().map(e -> {
                 if (e.denominator == maxDenominator) {
@@ -617,7 +618,7 @@ public class Solution {
 
     }
 
-    static class Fraction {
+    public static class Fraction {
         int numerator;
         int denominator;
 
@@ -710,6 +711,13 @@ public class Solution {
      */
     static int lcdF(int d1, int d2) {
         return d1 * d2 / gcd(d1, d2);
+    }
+    static int lcdF(int[]nums) {
+        int rt=lcdF(nums[0],1);
+        for(int x=0;x<nums.length;++x){
+            rt = lcdF(rt,nums[x]);
+        }
+        return rt;
     }
 
     /**
