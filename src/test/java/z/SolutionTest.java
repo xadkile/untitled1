@@ -59,11 +59,15 @@ class SolutionTest {
 //            new int[]{0,0,0,0,0},
 //        };
         int[][] m = new int[][]{
-            new int[]{0,},
+            new int[]{0,1},
+            new int[]{0,0},
         };
 
         int[]rt = Solution.solution(m);
-        System.out.println("enddd");
+        for(int x : rt){
+
+            System.out.println(x);
+        }
     }
     @Test
     void qwe3(){

@@ -8,41 +8,46 @@ import java.util.stream.Collectors;
 
 public class Solution {
     public static int[] solution(int[][] m) {
-        Solution.InputHandler handler = new Solution.InputHandler(m);
-        Solution.FracMatrix matrix = handler.readyForUse();
-        Solution.ReArrangeResult reArrange = matrix.reArrange();
-        Solution.FracMatrix Q = reArrange.Q;
-//        Solution.FracMatrix R = reArrange.Q;
-        Solution.FracMatrix F = Solution.FracMatrix.I(Q.rowCount()).subtract(Q).inverse();
-        Solution.FracMatrix FR = F.mul(reArrange.R);
+        InputHandler handler = new InputHandler(m);
+        FracMatrix matrix = handler.readyForUse();
+        ReArrangeResult reArrange = matrix.reArrange();
+        FracMatrix Q = reArrange.Q;
+//        FracMatrix R = reArrange.Q;
+        FracMatrix F = FracMatrix.I(Q.rowCount()).subtract(Q).inverse();
+        FracMatrix FR = F.mul(reArrange.R);
         // make Limit
         int terminalCount = reArrange.I.rowCount();
         int nonTerminalCount = reArrange.Q.rowCount();
-        Solution.FracMatrix IO = Solution.FracMatrix.O(terminalCount, nonTerminalCount).concat(reArrange.I);
-        Solution.FracMatrix FRO = Solution.FracMatrix.O(nonTerminalCount, nonTerminalCount).concat(FR);
-        Solution.FracMatrix limitMatrix = FRO.stack(IO);
+        FracMatrix IO = FracMatrix.O(terminalCount, nonTerminalCount).concat(reArrange.I);
+        FracMatrix FRO = FracMatrix.O(nonTerminalCount, nonTerminalCount).concat(FR);
+        FracMatrix limitMatrix = FRO.stack(IO);
         List<Integer> terminalStates = FracMatrix.getTerminalState(handler.makeOriginalFracMatrix());
-        Fraction[] s0RowUnfiltered = limitMatrix.getRow(0);
-        List<Solution.Fraction> s0Row = new ArrayList<>();
-        for(int x=0;x<s0RowUnfiltered.length;++x){
-            if(terminalStates.contains(x)){
-                s0Row.add(s0RowUnfiltered[x]);
+        if(limitMatrix.isEmpty()){
+            return new int[0];
+        }else{
+            Fraction[] s0RowUnfiltered = limitMatrix.getRow(0);
+            List<Fraction> s0Row = new ArrayList<>();
+            for (int x = 0; x < s0RowUnfiltered.length; ++x) {
+                if (terminalStates.contains(x)) {
+                    s0Row.add(s0RowUnfiltered[x]);
+                }
             }
+
+            List<Integer> denominators = s0Row.stream().map(e -> e.denominator).collect(Collectors.toList());
+            int maxDenominator = denominators.stream().mapToInt(e -> e).max().getAsInt();
+
+            List<Integer> numerators = s0Row.stream().map(e -> {
+                if (e.denominator == maxDenominator) {
+                    return e.numerator;
+                } else {
+                    return e.numerator * maxDenominator / e.denominator;
+                }
+            }).collect(Collectors.toList());
+            numerators.add(maxDenominator);
+            int[] rt = numerators.stream().mapToInt(i -> i).toArray();
+            return rt;
         }
 
-        List<Integer> denominators = s0Row.stream().map(e -> e.denominator).collect(Collectors.toList());
-        int maxDenominator = denominators.stream().mapToInt(e -> e).max().getAsInt();
-
-        List<Integer> numerators = s0Row.stream().map(e -> {
-            if (e.denominator == maxDenominator) {
-                return e.numerator;
-            } else {
-                return e.numerator * maxDenominator / e.denominator;
-            }
-        }).collect(Collectors.toList());
-        numerators.add(maxDenominator);
-        int[] rt = numerators.stream().mapToInt(i -> i).toArray();
-        return rt;
     }
 
 
@@ -203,10 +208,10 @@ public class Solution {
 
         public FracMatrix inverse() {
             GJTransResult result = GaussJordanTransformation.makeTransformation(this);
-            Solution.FracMatrix trans = result.transMatrix;
-            Solution.FracMatrix resultingMatrix = result.resultingMatrix;
-            Solution.FracMatrix inversedValueResultingMAtrix = resultingMatrix.inverseValue();
-            Solution.FracMatrix inv = inversedValueResultingMAtrix.mul(trans);
+            FracMatrix trans = result.transMatrix;
+            FracMatrix resultingMatrix = result.resultingMatrix;
+            FracMatrix inversedValueResultingMAtrix = resultingMatrix.inverseValue();
+            FracMatrix inv = inversedValueResultingMAtrix.mul(trans);
             return inv;
         }
 
@@ -244,7 +249,7 @@ public class Solution {
         }
 
 
-        static public List<Integer> getTerminalState(FracMatrix input){
+        static public List<Integer> getTerminalState(FracMatrix input) {
             List<Integer> terminalStates = new ArrayList<>();
             for (int r = 0; r < input.rowCount(); ++r) {
                 if (input.isZeroRow(input.getRow(r))) {
@@ -253,7 +258,8 @@ public class Solution {
             }
             return terminalStates;
         }
-        static public List<Integer> getNonTerminalState(FracMatrix input){
+
+        static public List<Integer> getNonTerminalState(FracMatrix input) {
             List<Integer> nonTerminalStates = new ArrayList<>();
             for (int r = 0; r < input.rowCount(); ++r) {
                 if (!input.isZeroRow(input.getRow(r))) {
@@ -415,17 +421,28 @@ public class Solution {
             return Arrays.stream(row).allMatch(e -> e.equals(Fraction.ZERO));
         }
 
+        boolean isEmpty() {
+            return rows.length == 0;
+        }
+
         FracMatrix copy() {
-            Fraction[][] r2 = new Fraction[rows.length][rows[0].length];
-            for (int x = 0; x < rows.length; x++) {
-                for (int y = 0; y < rows[0].length; ++y) {
-                    r2[x][y] = this.rows[x][y];
+            if (this.isEmpty()) {
+                return new FracMatrix(new Fraction[0][]);
+            } else {
+                Fraction[][] r2 = new Fraction[rows.length][rows[0].length];
+                for (int x = 0; x < rows.length; x++) {
+                    for (int y = 0; y < rows[0].length; ++y) {
+                        r2[x][y] = this.rows[x][y];
+                    }
                 }
+                return new FracMatrix(r2);
             }
-            return new FracMatrix(r2);
         }
 
         FracMatrix transpose() {
+            if(this.isEmpty()){
+                return new FracMatrix(new Fraction[0][]);
+            }
             int rc = rows.length;
             int cc = rows[0].length;
             Fraction[][] rt = new Fraction[cc][rc];
@@ -483,7 +500,11 @@ public class Solution {
         }
 
         int colCount() {
-            return this.rows[0].length;
+            if (this.isEmpty()) {
+                return 0;
+            } else {
+                return this.rows[0].length;
+            }
         }
 
     }
@@ -658,7 +679,7 @@ public class Solution {
 
 
         Fraction reduce() {
-            int gcd = Solution.gcd(this.denominator, this.numerator);
+            int gcd = gcd(this.denominator, this.numerator);
             return new Fraction(this.numerator / gcd, this.denominator / gcd);
         }
 
