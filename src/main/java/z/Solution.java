@@ -18,37 +18,58 @@ public class Solution {
         // make Limit matrix
         int terminalCount = reArrange.I.rowCount();
         int nonTerminalCount = reArrange.Q.rowCount();
-        FracMatrix IO = FracMatrix.O(terminalCount, nonTerminalCount).concat(reArrange.I);
-        FracMatrix FRO = FracMatrix.O(nonTerminalCount, nonTerminalCount).concat(FR);
-        FracMatrix limitMatrix = FRO.stack(IO);
+        FracMatrix IO = reArrange.I.concat(FracMatrix.O(terminalCount, nonTerminalCount));
+        FracMatrix FRO = FR.concat(FracMatrix.O(nonTerminalCount, nonTerminalCount));
+        FracMatrix limitMatrix = IO.stack(FRO);
 
         List<Integer> terminalStates = FracMatrix.getTerminalState(handler.makeOriginalFracMatrix());
+        List<Integer> nonTerminalStates = FracMatrix.getNonTerminalState(handler.makeOriginalFracMatrix());
+        List<Integer> allStates = FracMatrix.getTerminalState(handler.makeOriginalFracMatrix());
+        allStates.addAll(nonTerminalStates);
+        MatrixWithState limitMatrix2 = new MatrixWithState(limitMatrix,allStates,allStates);
+
         if(limitMatrix.isEmpty()){
             return new int[0];
-        }else{
-            Fraction[] s0RowUnfiltered = limitMatrix.getRow(0);
-            List<Fraction> s0Row = new ArrayList<>();
-            for (int x = 0; x < s0RowUnfiltered.length; ++x) {
-                if (terminalStates.contains(x)) {
-                    s0Row.add(s0RowUnfiltered[x]);
-                }
-            }
-
-            List<Integer> denominators = s0Row.stream().map(e -> e.denominator).collect(Collectors.toList());
-            int maxDenominator = lcdF(denominators.stream().mapToInt(e->e).toArray());
-
-            List<Integer> numerators = s0Row.stream().map(e -> {
-                if (e.denominator == maxDenominator) {
-                    return e.numerator;
-                } else {
-                    return e.numerator * maxDenominator / e.denominator;
-                }
-            }).collect(Collectors.toList());
-            numerators.add(maxDenominator);
-            int[] rt = numerators.stream().mapToInt(i -> i).toArray();
-            return rt;
         }
 
+        List<Fraction> s0Row = new ArrayList<>();
+        for(int termState:terminalStates){
+            s0Row.add(limitMatrix2.get(0,termState).reduce());
+        }
+
+        List<Integer> denominators = s0Row.stream().map(e -> e.denominator).collect(Collectors.toList());
+        int maxDenominator = lcdF(denominators.stream().mapToInt(e->e).toArray());
+
+        List<Integer> numerators = s0Row.stream().map(e -> {
+            if (e.denominator == maxDenominator) {
+                return e.numerator;
+            } else {
+                return e.numerator * maxDenominator / e.denominator;
+            }
+        }).collect(Collectors.toList());
+        numerators.add(maxDenominator);
+        int[] rt = numerators.stream().mapToInt(i -> i).toArray();
+        return rt;
+
+
+    }
+
+    public static class MatrixWithState{
+        FracMatrix matrix;
+        List<Integer> fromStates;
+        List<Integer> toStates;
+
+        public MatrixWithState(FracMatrix matrix, List<Integer> fromStates, List<Integer> toStates) {
+            this.matrix = matrix;
+            this.fromStates = fromStates;
+            this.toStates = toStates;
+        }
+
+        Fraction get(int fromState, int toState){
+            int fromIndex = fromStates.indexOf(fromState);
+            int toIndex = toStates.indexOf(toState);
+            return this.matrix.get(fromIndex,toIndex);
+        }
     }
 
 
@@ -164,17 +185,6 @@ public class Solution {
         }
     }
 
-    static class LimitMatrix {
-        FracMatrix fracMatrix;
-
-        public LimitMatrix(FracMatrix fracMatrix) {
-            this.fracMatrix = fracMatrix;
-        }
-
-        Fraction get(int fromState, int toState) {
-            return Fraction.ZERO;
-        }
-    }
 
     static class FracMatrix {
         Fraction[][] rows;
@@ -246,6 +256,7 @@ public class Solution {
         }
 
         Fraction[] getRow(int r) {
+
             return this.rows[r];
         }
 

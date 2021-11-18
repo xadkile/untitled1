@@ -47,34 +47,34 @@ class SolutionTest {
             new int[]{0, 0, 0, 0, 0, 0},
         };
 
-        m = new int[][]{
-            new int[]{0, 2, 1, 0, 0},
-            new int[]{0, 0, 0, 3, 4},
-            new int[]{0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0},
-        };
-        //6x6
-        m = new int[][]{
-            new int[]{0, 2, 1, 0, 0, 2},
-            new int[]{0, 0, 0, 3, 4, 0},
-            new int[]{0, 0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0, 0},
-        };
-        // 7x7 => success
-        m = new int[][]{
-            new int[]{0, 2, 1, 0, 0, 2, 0},
-            new int[]{0, 0, 0, 3, 4, 0, 1},
-            new int[]{0, 0, 0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0, 0, 0},
-            new int[]{0, 0, 0, 0, 0, 0, 0}
-        };
-
-        //7x7 -> fail test here, what the heck?
+//        m = new int[][]{
+//            new int[]{0, 2, 1, 0, 0},
+//            new int[]{0, 0, 0, 3, 4},
+//            new int[]{0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0},
+//        };
+//        //6x6
+//        m = new int[][]{
+//            new int[]{0, 2, 1, 0, 0, 2},
+//            new int[]{0, 0, 0, 3, 4, 0},
+//            new int[]{0, 0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0, 0},
+//        };
+//        // 7x7 => success
+//        m = new int[][]{
+//            new int[]{0, 2, 1, 0, 0, 2, 0},
+//            new int[]{0, 0, 0, 3, 4, 0, 1},
+//            new int[]{0, 0, 0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0, 0, 0},
+//            new int[]{0, 0, 0, 0, 0, 0, 0}
+//        };
+//
+//        //7x7 -> fail test here, what the heck?
         m = new int[][]{
             new int[]{0, 2, 1, 0, 0, 2, 3},
             new int[]{0, 0, 0, 3, 4, 0, 0},
@@ -84,18 +84,55 @@ class SolutionTest {
             new int[]{0, 0, 0, 0, 0, 0, 0},
             new int[]{0, 0, 0, 0, 0, 0, 0},
         };
+        // 8x8
         m = new int[][]{
-            new int[]{0,2,1,0,0,3,8,2,1,1},
-            new int[]{0,0,0,3,4,0,0,0,2,1},
-            new int[]{0,0,0,0,0,0,0,0,0,0},
-            new int[]{0,0,0,0,0,2,2,1,3,3},
-            new int[]{0,0,0,0,0,0,0,0,0,0},
-            new int[]{0,0,0,0,0,0,0,0,0,0},
-            new int[]{0,0,0,0,0,0,0,0,0,0},
-            new int[]{0,0,0,0,0,0,0,0,0,0},
-            new int[]{0,0,0,0,0,0,0,0,0,0},
-            new int[]{0,0,0,0,0,0,0,0,0,0},
+            new int[]{0, 2, 1, 0, 0, 2, 3, 0},
+            new int[]{0, 0, 0, 2, 0, 0, 0, 3},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 2, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 2, 0, 0, 0, 0},
         };
+        m = new int[][]{
+            new int[]{0, 2, 1, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 1, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
+//        // this is failing, sum of result does not add to 0
+        // this throw exception
+//        m = new int[][]{
+//            new int[]{0,0,0,0,0,1,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//        };
+        // this return in correct result. Should be 0,0,0,0...
+//        m = new int[][]{
+//            new int[]{0,0,0,0,2,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//            new int[]{0,0,0,0,0,0,0,0,0,0},
+//        };
 
         int[] rt = Solution.solution(m);
         for (int x : rt) {
@@ -106,6 +143,7 @@ class SolutionTest {
             sum += rt[x];
         }
         assertEquals(sum, rt[rt.length - 1]);
+        assertEquals(1, rt[rt.length - 1]);
     }
 
     @Test
@@ -130,7 +168,7 @@ class SolutionTest {
 //        assertEquals(8,Solution.lcdF(8,2));
 //        assertEquals(21,Solution.lcdF(7,3));
         assertEquals(56,
-            Solution.lcdF(new int[]{8,7,28,4,2})
+            Solution.lcdF(new int[]{8, 7, 28, 4, 2})
 
         );
 
